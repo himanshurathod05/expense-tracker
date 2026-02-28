@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="page-title">All Expenses</h3>
+
+<table border="1" cellpadding="10">
+<tr>
+    <th>Date</th>
+    <th>Category</th>
+    <th>Amount</th>
+    <th>Description</th>
+</tr>
+
+{% for expense in expenses %}
+<tr>
+    <td>{{ expense.date }}</td>
+    <td>{{ expense.category }}</td>
+    <td>₹ {{ expense.amount }}</td>
+    <td>{{ expense.description }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

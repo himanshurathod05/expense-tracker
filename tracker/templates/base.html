@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Expense Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+        }
+
+        /* Top Header */
+        .topbar {
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .card {
+            background: white;
+            color: #333;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #2c3e50;
+            height: 100vh;
+            padding: 25px 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            background: #1abc9c;
+            padding-left: 20px;
+        }
+
+        /* Active Menu */
+        .sidebar a.active {
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        /* Form Styling */
+        form {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            width: 500px;
+            max-width: 100%;
+            transition: 0.3s ease;
+        }
+
+        form:hover {
+            transform: translateY(-4px);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #4e73df;
+            outline: none;
+            box-shadow: 0 0 8px rgba(78,115,223,0.4);
+        }
+
+        button {
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        table th {
+            background: #4e73df;
+            color: white;
+            padding: 14px;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* ================= DARK MODE ================= */
+
+        .dark-mode {
+            background: #121212;
+            color: #f1f1f1;
+        }
+
+        .dark-mode .topbar {
+            background: linear-gradient(135deg, #1e1e2f, #2c3e50);
+        }
+
+        .dark-mode .sidebar {
+            background: #1e1e2f;
+        }
+
+        .dark-mode .sidebar a {
+            color: #ddd;
+        }
+
+        .dark-mode form,
+        .dark-mode table {
+            background: #1f1f2e;
+            color: #f1f1f1;
+        }
+
+        .dark-mode input,
+        .dark-mode select,
+        .dark-mode textarea {
+            background: #2b2b3d;
+            color: white;
+            border: 1px solid #444;
+        }
+
+        .dark-mode table th {
+            background: #2c3e50;
+        }
+
+        .dark-mode table tr:nth-child(even) {
+            background: #26263a;
+        }
+
+        .dark-mode .footer {
+            background: #1e1e2f;
+        }
+
+        .dark-mode .empty-state {
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+  <button onclick="toggleDarkMode()" style="margin-left:20px; padding:8px 15px; border-radius:6px;">
+    🌙 Toggle Mode
+  </button> 
+    <h2>PERSONAL EXPENSE TRACKER</h2>
+    <div style="display:flex; gap:20px;">
+        <div class="card">Budget: ₹ {{ total_budget }}</div>
+        <div class="card">Spent: ₹ {{ total_spent }}</div>
+        <div class="card">Remaining: ₹ {{ remaining }}</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="sidebar">
+        <a href="/" class="{% if request.path == '/' %}active{% endif %}">🏠 Dashboard</a>
+        <a href="/add/" class="{% if request.path == '/add/' %}active{% endif %}">➕ Add Expense</a>
+        <a href="/view/" class="{% if request.path == '/view/' %}active{% endif %}">📋 View Expenses</a>
+        <a href="/budget/" class="{% if request.path == '/budget/' %}active{% endif %}">💳Set Budget</a>
+    </div>
+
+    <div class="main">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+
+    if(document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+}
+
+// Load saved theme
+window.onload = function() {
+    if(localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+};
+</script>
+
+</body>
+</html>
